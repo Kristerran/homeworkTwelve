@@ -7,7 +7,7 @@ router.get('/', async (req, res) => {
   // find all categories
   // be sure to include its associated Products
   try {
-    const categoryData = await category.findAll({
+    const categoryData = await Category.findAll({
       include: [{ model: Product }],
     });
     res.status(200).json(categoryData);
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   // create a new category
-  category.create({
+  Category.create({
     title: req.body.title,
     author: req.body.author,
     is_paperback: true
