@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     const tagData = await Tag.findAll({
       include: [{ model: Product }],
     });
-    res.status(200).json(CategoryData);
+    res.status(200).json(tagData);
   } catch (err) {
     console.log(err)
     res.status(500).json(err);
@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
   // find a single tag by its `id`
   // be sure to include its associated Product data
   try {
-    const tagData = await Category.findByPk(req.params.id, {
+    const tagData = await Tag.findByPk(req.params.id, {
       include: [{ model: Product }],
     });
 
@@ -40,9 +40,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new tag
   Tag.create({
-    title: req.body.title,
-    author: req.body.author,
-    is_paperback: true
+    tag_name: req.body.tag_name
   })
     .then((newTag) => {
       // Send the newly created row as a JSON object
@@ -56,10 +54,15 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
   // update a tag's name by its `id` value
-  Tag.update(
-    {name: req.body.name},
-    {where: req.params.id}
-  )
+  Tag.updateProduct.update(req.body, {
+    where: {
+      id: req.params.id,
+    },
+  }).then((updatedTag) => res.json(updatedTag))
+  .catch((err) => {
+     console.log(err);
+    res.status(400).json(err);
+})
 });
 
 router.delete('/:id', async (req, res) => {

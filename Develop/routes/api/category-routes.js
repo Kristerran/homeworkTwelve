@@ -21,12 +21,12 @@ router.get('/:id', async (req, res) => {
   // find one category by its `id` value
   // be sure to include its associated Products
   try {
-    const categoryData = await category.findByPk(req.params.id, {
+    const categoryData = await Category.findByPk(req.params.id, {
       include: [{ model: Product }],
     });
 
     if (!categoryData) {
-      res.status(404).json({ message: 'No library card found with that id!' });
+      res.status(404).json({ message: 'No category found with that id!' });
       return;
     }
 
@@ -39,9 +39,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   // create a new category
   Category.create({
-    title: req.body.title,
-    author: req.body.author,
-    is_paperback: true
+    category_name: req.body.category_name
   })
     .then((newCategory) => {
       // Send the newly created row as a JSON object
